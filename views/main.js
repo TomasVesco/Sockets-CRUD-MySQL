@@ -4,8 +4,9 @@ function renderMessage(data) {
     const html = data.map(elem => {
         return(`
         <div>
-            <strong>${elem.author}</strong>:
-            <em>${elem.text}</em> 
+            <strong style="color: #3352FF">${elem.author}</strong>:
+            <em style="color: #BA842C">${elem.date}</em>
+            <em style="color: #64B02D">${elem.text}</em> 
         </div>`)
     }).join(" ");
     document.getElementById('messages').innerHTML = html;
@@ -23,14 +24,18 @@ function addMessage(e) {
 }
 
 function renderProduct(data) {
-    const html = data.map(elem => {
-        return(`
-        <td>${elem.title}</td>
-        <td>${elem.price}</td>
-        <td><img src="${elem.image}" alt=""></td>
-        `)
-    }).join(" ");
-    document.getElementById('products').innerHTML = html;
+    if(data[0].id === 0){
+        document.getElementById('no-product').innerHTML = '<p>No hay productos</p>';
+    } else {
+        const html = data.map(elem => {
+            return(`
+            <td>${elem.title}</td>
+            <td>${elem.price}</td>
+            <td><img src="${elem.image}" alt=""></td>
+            `)
+        }).join(" ");
+        document.getElementById('products').innerHTML = html;
+    }
 }
 
 socket.on('products', function(data) {renderProduct(data); });

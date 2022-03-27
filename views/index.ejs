@@ -42,7 +42,7 @@
                 <!-- if no product -->
                 <% if (product[0].id == 0) { %>
                     <tr>
-                        <td colspan="3">No hay productos</td>
+                        <td colspan="3"><p id="no-product"></p></td>
                     </tr>
                 <% }else{ %>
                 
@@ -58,7 +58,7 @@
         <div id="messages"></div>
     
         <form onsubmit="addMessage(this)">
-            <input type="text" id="username" placeholder="Tu Nombre" >
+            <input type="text" id="username" placeholder="Tu email" >
             <input type="text" id="texto" placeholder="Cuéntanos algo...">
             <input type="submit" value="Enviar">
         </form>

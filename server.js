@@ -1,6 +1,8 @@
 const express = require('express');
-const app = express();
+const moment = require('moment');
 const Contenedor = require('./clase');
+
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +34,6 @@ app.post('/productos', async (req, res) => {
     res.render('index', { product });  
 });
 
-
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
 
@@ -43,11 +44,7 @@ httpServer.listen(8080, function () {
   console.log("Servidor corriendo en http://localhost:8080");
 });
 
-const messages = [
-  { author: "Juan", text: "¡Hola! ¿Que tal?" },
-  { author: "Pedro", text: "¡Muy bien! ¿Y vos?" },
-  { author: "Ana", text: "¡Genial!" },
-];
+const messages = [];
 
 io.on("connection", async function (socket) {
 
@@ -58,7 +55,8 @@ io.on("connection", async function (socket) {
   socket.emit("products", products);
 
   socket.on("new-message", (data) => {
-    messages.push(data);
+    let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
+    messages.push({...data, date: date});
     io.sockets.emit("messages", messages);
   });
 

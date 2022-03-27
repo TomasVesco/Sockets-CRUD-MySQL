@@ -1,6 +1,8 @@
 const express = require('express');
 const moment = require('moment');
-const Contenedor = require('./clase');
+
+const ContenedorProducts = require('./claseProducts');
+// const ContenedorMensajes = require('./claseMensajes');
 
 const app = express();
 
@@ -10,7 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
-const p = new Contenedor( './productos.txt' );
+const p = new ContenedorProducts( './productos.txt' );
+// const m = new ContenedorMensajes( './mensajes.txt' );
 
 app.get('/productos', async (req, res) => {
     const product = await p.getAll();
@@ -18,20 +21,26 @@ app.get('/productos', async (req, res) => {
 });
 
 app.post('/productos', async (req, res) => {
-    let product = await p.getAll();
+  let product = await p.getAll();
+  // let messages = await m.getAll();
 
-    const { title, price, image } = req.body;
+  const { title, price, image } = req.body;
+  // const { username, texto } = req.body;
 
+  if(title != '' && price != '' && image != ''){
     const newProduct = {
-        title: title,
-        price: price,
-        image: image
+      title: title,
+      price: price,
+      image: image
     }
-
+  
     await p.save(newProduct);
+  
+    product = await p.getAll(); 
+    
+  }
 
-    product = await p.getAll();
-    res.render('index', { product });  
+  res.render('index', { product });
 });
 
 const { Server: HttpServer } = require("http");

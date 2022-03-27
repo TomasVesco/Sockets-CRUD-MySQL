@@ -4,8 +4,8 @@ function renderMessage(data) {
     const html = data.map(elem => {
         return(`
         <div>
-            <strong style="color: #3352FF">${elem.author}</strong>:
-            <em style="color: #BA842C">${elem.date}</em>
+            <strong style="color: #3352FF">${elem.author}</strong>
+            <em style="color: #BA842C">[${elem.date}]</em>:
             <em style="color: #64B02D">${elem.text}</em> 
         </div>`)
     }).join(" ");

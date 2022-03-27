@@ -1,1 +1,8 @@
-[{"id":0}]
+[
+    {
+        "title": "123",
+        "price": "123",
+        "image": "https://empresas.blogthinkbig.com/wp-content/uploads/2019/11/Imagen3-245003649.jpg?w=800",
+        "id": 1
+    }
+]

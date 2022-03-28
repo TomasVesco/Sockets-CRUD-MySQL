@@ -33,8 +33,8 @@ httpServer.listen(8080, function () {
 
 
 app.get('/productos', async (req, res) => {
-    let product = await p.getAll();
-    res.render('index', { product } );
+  let products = await p.getAll();
+  res.render('index', { products } );
 });
 
 io.on("connection", async function (socket) {
@@ -62,7 +62,9 @@ io.on("connection", async function (socket) {
 
     let products = await p.getAll();
 
-    products = await p.save(data);
+    if(data.title !== '' & data.price !== '' && data.image !== ''){
+      products = await p.save(data);
+    }
 
     io.sockets.emit("products", products);
   });

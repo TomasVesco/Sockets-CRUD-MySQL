@@ -38,13 +38,13 @@
                 </tr>
             </thead>
             <tbody>
-                <% if (product[0].id == 0) { %>
+                <% if (products[0].id == 0) { %>
                     <tr>
                         <td colspan="3" id="no-product"></p></td>
                     </tr>
                 <% }else{ %>
                 
-                <% for (let i = 0; i < product.length; i++) { %>
+                <% for (let i = 0; i < products.length; i++) { %>
                     <tr>
                         <div id="products"></div>
                     </tr>

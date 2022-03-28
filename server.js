@@ -1,24 +1,20 @@
 const express = require('express');
 const moment = require('moment');
 
-const ContenedorProducts = require('./claseProducts');
-const ContenedorMensajes = require('./claseMensajes');
+const ContenedorProducts = require('./clases/claseProducts');
+const ContenedorMensajes = require('./clases/claseMensajes');
+
+const p = new ContenedorProducts( './ficheros/productos.txt' );
+const m = new ContenedorMensajes( './ficheros/mensajes.txt' );
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("views"));
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
-
-const p = new ContenedorProducts( './productos.txt' );
-const m = new ContenedorMensajes( './mensajes.txt' );
-
-app.get('/productos', async (req, res) => {
-    let product = await p.getAll();
-    res.render('index', { product } );
-});
 
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
@@ -30,25 +26,44 @@ httpServer.listen(8080, function () {
   console.log("Servidor corriendo en http://localhost:8080");
 });
 
+
+
+// ---------------------> FIN DECLARACIONES <---------------------
+
+
+
+app.get('/productos', async (req, res) => {
+    let product = await p.getAll();
+    res.render('index', { product } );
+});
+
 io.on("connection", async function (socket) {
 
   let products = await p.getAll();
   let messages = await m.getAll();
 
-  console.log("Un cliente se ha conectado");
   socket.emit("messages", messages);
   socket.emit("products", products);
 
   socket.on("new-message", async (data) => {
+
+    let messages = await m.getAll();
+
     let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
-    messages = await m.save({...data, date: date});
+
+    if(data.author !== '' && data.text !== ''){
+      messages = await m.save({...data, date: date});
+    }
+
     io.sockets.emit("messages", messages);
   });
 
-  socket.on("new-product", async (data) => {
+  socket.on("new-product", async(data) => {
+
+    let products = await p.getAll();
+
     products = await p.save(data);
+
     io.sockets.emit("products", products);
   });
 });
-
-app.use(express.static("views"));

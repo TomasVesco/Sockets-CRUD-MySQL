@@ -9,11 +9,15 @@ class ContenedorMensajes {
     async save( fileToAdd ) { 
         try {
             const newFile = await this.getAll();
-     
+      
             newFile.push( fileToAdd ); 
+
+            if(newFile[0].id == '0'){
+                newFile.shift();
+            }
             
             fs.writeFileSync( this.route, JSON.stringify( newFile, null, 4 ));
-            return newFile[newFile.length - 1].id;
+            return newFile;
         }
 
         catch(error) {

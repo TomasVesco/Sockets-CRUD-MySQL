@@ -6,12 +6,12 @@ class ContenedorProducts {
         this.route = route;
     }
 
-    async save( fileToAdd ) { 
+    async save( productToAdd ) { 
         try {
             const newFile = await this.getAll();
 
-            fileToAdd.id = newFile[newFile.length - 1].id + 1;       
-            newFile.push( fileToAdd ); 
+            productToAdd.id = newFile[newFile.length - 1].id + 1;       
+            newFile.push( productToAdd ); 
 
             if(newFile[0].id == '0'){
                 newFile.shift();

@@ -46,11 +46,11 @@ function renderProduct(data) {
             </td>
             `)
         }
-    }).join(" ");
+    });
     document.getElementById('products').innerHTML = html;
 }
 
-socket.on('products', function(data) {renderProduct(data); });
+socket.on('products', function(data) { renderProduct(data); });
 
 function addProduct(e) {
     const product = {

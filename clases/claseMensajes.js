@@ -6,11 +6,11 @@ class ContenedorMensajes {
         this.route = route;
     }
 
-    async save( fileToAdd ) { 
+    async save( messageToAdd ) { 
         try {
             const newFile = await this.getAll();
       
-            newFile.push( fileToAdd ); 
+            newFile.push( messageToAdd ); 
 
             if(newFile[0].id == '0'){
                 newFile.shift();

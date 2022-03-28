@@ -32,18 +32,22 @@ function addMessage(e) {
 }
 
 function renderProduct(data) {
-    if(data[0].id === 0){
-        document.getElementById('no-product').innerHTML = '<p>No hay productos</p>';
-    } else {
-        const html = data.map(elem => {
+    const html = data.map(elem => {
+        if(elem.id !== 0){
             return(`
             <td>${elem.title}</td>
             <td>${elem.price}</td>
             <td><img src="${elem.image}" alt=""></td>
             `)
-        }).join(" ");
-        document.getElementById('products').innerHTML = html;
-    }
+        } else {
+            return(`
+            <td>
+                <strong>No hay Productos</strong>
+            </td>
+            `)
+        }
+    }).join(" ");
+    document.getElementById('products').innerHTML = html;
 }
 
 socket.on('products', function(data) {renderProduct(data); });

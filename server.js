@@ -34,7 +34,8 @@ httpServer.listen(8080, function () {
 
 app.get('/productos', async (req, res) => {
   let products = await p.getAll();
-  res.render('index', { products } );
+  let messages = await m.getAll();
+  res.render('index', { products, messages } );
 });
 
 io.on("connection", async function (socket) {
@@ -47,8 +48,6 @@ io.on("connection", async function (socket) {
 
   socket.on("new-message", async (data) => {
 
-    let messages = await m.getAll();
-
     let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
 
     if(data.author !== '' && data.text !== ''){
@@ -59,8 +58,6 @@ io.on("connection", async function (socket) {
   });
 
   socket.on("new-product", async(data) => {
-
-    let products = await p.getAll();
 
     if(data.title !== '' & data.price !== '' && data.image !== ''){
       products = await p.save(data);

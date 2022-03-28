@@ -14,15 +14,15 @@
         <form onsubmit="addProduct(this)">
             <div class="form-group">
                 <em>Título</em>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Ingrese el nombre del artículo">
+                <input type="text" class="form-control" id="title" placeholder="Ingrese el nombre del artículo">
             </div>
             <div class="form-group">
                 <em>Precio</em>
-                <input type="text" class="form-control" id="price" name="price" placeholder="Ingrese el precio del artículo">
+                <input type="text" class="form-control" id="price" placeholder="Ingrese el precio del artículo">
             </div>
             <div class="form-group">
                 <em>Imágen</em>
-                <input type="text" class="form-control" id="image" name="image" placeholder="Ingrese la imágen (URL) del artículo">
+                <input type="text" class="form-control" id="image" placeholder="Ingrese la imágen (URL) del artículo">
             </div>
             <input class="btn btn-primary" type="submit" value="Enviar">
         </form>
@@ -37,19 +37,7 @@
                     <th scope="col">Imágen</th>
                 </tr>
             </thead>
-            <tbody>
-                <% if (products[0].id == 0) { %>
-                    <tr>
-                        <td colspan="3" id="no-product"></p></td>
-                    </tr>
-                <% }else{ %>
-                
-                <% for (let i = 0; i < products.length; i++) { %>
-                    <tr>
-                        <div id="products"></div>
-                    </tr>
-                <% } } %>
-            </tbody>
+            <tbody id="products"></tbody>
         </table>
 
         <h1>Mensajes</h1>

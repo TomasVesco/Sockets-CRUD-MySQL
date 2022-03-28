@@ -57,7 +57,7 @@ function addProduct(e) {
         title: document.getElementById('title').value,
         price: document.getElementById('price').value,
         image: document.getElementById('image').value
-    }
+    };
     socket.emit('new-product', product);
     return false;
 }

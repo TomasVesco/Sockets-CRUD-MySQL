@@ -22,8 +22,10 @@ const { Server: IOServer } = require("socket.io");
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
-httpServer.listen(8080, function () {
-  console.log("Servidor corriendo en http://localhost:8080");
+const PORT = 8080;
+
+httpServer.listen(PORT, function () {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
 

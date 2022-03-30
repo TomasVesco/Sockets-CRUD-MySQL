@@ -18,7 +18,7 @@ class ContenedorProducts {
             }
             
             fs.writeFileSync( this.route, JSON.stringify( newFile, null, 4 ));
-            return newFile[newFile.length - 1].id;
+            return newFile;
         }
 
         catch(error) {

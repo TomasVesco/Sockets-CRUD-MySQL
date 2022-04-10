@@ -41,19 +41,27 @@ app.get('/productos', async (req, res) => {
 
 io.on("connection", async function (socket) {
 
-  // products = await p.getAll();
+  products = await p.getAll();
   // messages = await m.getAll();
 
-  // socket.emit("products", products);
+  socket.emit("products", products);
   // socket.emit("messages", messages);
 
   socket.on("new-product", async (data) => {
 
     if(data.title !== '' & data.price !== '' && data.image !== ''){
-      products = await p.save();
+      newProduct = {
+        title: data.title,
+        price: data.price,
+        image: data.image
+      }
+
+      await p.save(newProduct);
     }
 
-    // io.sockets.emit("products", products);
+    products = await p.getAll();
+
+    io.sockets.emit("products", products);
   });
 
   // socket.on("new-message", async (data) => {

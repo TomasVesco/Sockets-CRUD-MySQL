@@ -4,8 +4,7 @@ const moment = require('moment');
 const ContenedorProducts = require('./clases/claseProducts');
 const ContenedorMensajes = require('./clases/claseMensajes');
 
-const p = new ContenedorProducts( './ficheros/productos.txt' );
-const m = new ContenedorMensajes( './ficheros/mensajes.txt' );
+const p = new ContenedorProducts();
 
 const app = express();
 
@@ -34,36 +33,38 @@ httpServer.listen(PORT, function () {
 
 
 
-app.get('/productos', (req, res) => {
-  res.render('index');
+app.get('/productos', async (req, res) => {
+
+  await p.save();
+
+  res.status(200).render('index');
 });
 
-io.on("connection", async function (socket) {
+// io.on("connection", async function (socket) {
 
-  products = await p.getAll();
-  messages = await m.getAll();
+//   products = await p.getAll();
+//   messages = await m.getAll();
 
-  socket.emit("products", products);
-  socket.emit("messages", messages);
+//   socket.emit("products", products);
+//   socket.emit("messages", messages);
 
-  socket.on("new-product", async (data) => {
+//   socket.on("new-product", async (data) => {
 
-    if(data.title !== '' & data.price !== '' && data.image !== ''){
-      products = await p.save(data);
-    }
+//     if(data.title !== '' & data.price !== '' && data.image !== ''){
+//       products = await p.save(data);
+//     }
 
-    io.sockets.emit("products", products);
-  });
+//     io.sockets.emit("products", products);
+//   });
 
-  socket.on("new-message", async (data) => {
+//   socket.on("new-message", async (data) => {
 
-    let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
+//     let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
 
-    if(data.author !== '' && data.text !== ''){
-      messages = await m.save({...data, date: date});
-    }
+//     if(data.author !== '' && data.text !== ''){
+//       messages = await m.save({...data, date: date});
+//     }
 
-    io.sockets.emit("messages", messages);
-  });
-});
-
+//     io.sockets.emit("messages", messages);
+//   });
+// });

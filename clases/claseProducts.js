@@ -1,73 +1,29 @@
-const fs = require('fs');
+const { options } = require('../DBcfg/mariaDB_conf');
+const knex = require('knex')(options);
 
 class ContenedorProducts {
 
-    constructor( route ) {
-        this.route = route;
-    }
+    async save() {
+        try{
 
-    async save( productToAdd ) { 
-        try {
-            const newFile = await this.getAll();
-
-            productToAdd.id = newFile[newFile.length - 1].id + 1;       
-            newFile.push( productToAdd ); 
-
-            if(newFile[0].id == '0'){
-                newFile.shift();
-            }
-            
-            fs.writeFileSync( this.route, JSON.stringify( newFile, null, 4 ));
-            return newFile;
-        }
-
-        catch(error) {
-            console.log(error);
-        }
-    }
-
-    async getById( id ) {
-        try {
-
-            const newFile = await this.getAll();
-            const IdFile = newFile.find( file => file.id === id );
+            await knex.schema.createTable('products', table => {
+                table.increments('id');
+                table.string('title');
+                table.integer('price');
+                table.string('description');
+                table.string('image');
+                table.integer('stock');
+                table.string('code');
+                table.string('timestamp');
+            });
+            console.log('Table product created');
     
-            if ( IdFile ) {
-                return IdFile;
-            } else {
-                return null;
-            }
-
-        } catch(error) {
-            console.log(error);
+        } catch(err) {
+            console.log(err);
+        } finally {
+            knex.destroy();
         }
-    }
-
-    async getAll() {
-        try {
-            let readFile = await fs.promises.readFile( this.route, 'utf-8' ); 
-            if(readFile == ''){
-                const obj = [
-                    {id: 0}
-                ];
-                fs.promises.writeFile( this.route, JSON.stringify(obj));
-            }
-            readFile = await fs.promises.readFile( this.route, 'utf-8' ); 
-            return JSON.parse( readFile );         
-        } catch(error) {
-            console.log(error);
-        }
-    }
-
-    async deleteById( id ) {
-        const newFile = await this.getAll();
-        newFile.splice(newFile.indexOf(newFile[id - 1]), 1);
-        fs.promises.writeFile( this.route, JSON.stringify( newFile, null, 4 ));
-    }
-
-    async deleteAll() {
-        fs.promises.writeFile( this.route, '' );
-    }
+    }    
 }
 
 module.exports = ContenedorProducts;

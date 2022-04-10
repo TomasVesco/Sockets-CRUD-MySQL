@@ -5,6 +5,7 @@ const ContenedorProducts = require('./class/productsClass');
 const ContenedorMensajes = require('./class/messageClass');
 
 const p = new ContenedorProducts();
+const m = new ContenedorMensajes();
 
 const app = express();
 
@@ -42,14 +43,14 @@ app.get('/productos', async (req, res) => {
 io.on("connection", async function (socket) {
 
   products = await p.getAll();
-  // messages = await m.getAll();
+  messages = await m.getAll();
 
   socket.emit("products", products);
-  // socket.emit("messages", messages);
+  socket.emit("messages", messages);
 
   socket.on("new-product", async (data) => {
 
-    if(data.title !== '' & data.price !== '' && data.image !== ''){
+    if(data.title !== '' && data.price !== '' && data.image !== '' && !isNaN(data.price)){
       newProduct = {
         title: data.title,
         price: data.price,
@@ -64,14 +65,22 @@ io.on("connection", async function (socket) {
     io.sockets.emit("products", products);
   });
 
-  // socket.on("new-message", async (data) => {
+  socket.on("new-message", async (data) => {
 
-  //   let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
+    let date = moment(new Date()).format('DD-MM-YYYY h:mm:ss a');
 
-  //   if(data.author !== '' && data.text !== ''){
-  //     messages = await m.save({...data, date: date});
-  //   }
+    if(data.author !== '' && data.text !== ''){
+      newMessages = {
+        author: data.author,
+        date: date,
+        text: data.text
+      }
 
-  //   io.sockets.emit("messages", messages);
-  // });
+      await m.save(newMessages);
+    }
+
+    messages = await m.getAll();
+
+    io.sockets.emit("messages", messages);
+  });
 });

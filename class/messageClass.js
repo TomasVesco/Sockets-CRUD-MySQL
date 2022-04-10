@@ -1,45 +1,51 @@
-const fs = require('fs');
+const { SQLite3_options } = require('../DBcfg/SQLite3_conf');
+const knex = require('knex')(SQLite3_options);
 
 class ContenedorMensajes {
 
-    constructor( route ) {
-        this.route = route;
-    }
-
-    async save( messageToAdd ) { 
-        try {
-            const newFile = await this.getAll();
-      
-            newFile.push( messageToAdd ); 
-
-            if(newFile[0].id == '0'){
-                newFile.shift();
-            }
-            
-            fs.writeFileSync( this.route, JSON.stringify( newFile, null, 4 ));
-            return newFile;
-        }
-
-        catch(error) {
-            console.log(error);
-        }
-    }
-
     async getAll() {
-        try {
-            let readFile = await fs.promises.readFile( this.route, 'utf-8' );
-            if(readFile == ''){
-                const obj = [
-                    {id: 0}
-                ];
-                fs.promises.writeFile( this.route, JSON.stringify(obj));
-            } 
-            readFile = await fs.promises.readFile( this.route, 'utf-8' ); 
-            return JSON.parse( readFile );         
-        } catch(error) {
-            console.log(error);
+        try{
+
+            const messages = await knex('messages');
+
+            return messages;
+
+        }catch(err){
+            console.log(err);
         }
     }
+
+    async save(newMessage) {
+        try{
+
+            const { author, date, text } = newMessage;
+
+            await knex('messages').insert({
+                author: author,
+                text: text,
+                timestamp: date
+            });
+    
+        } catch(err) {
+            console.log(err);
+        }
+    }  
 }
 
 module.exports = ContenedorMensajes;
+
+// try{
+
+//     await knex.schema.createTable('messages', table => {
+//         table.increments('id');
+//         table.string('author');
+//         table.string('text');
+//         table.string('timestamp');
+//     });
+//     console.log('Table messages created');
+
+// }catch(err){
+//     console.log(err);
+// }finally{
+//     knex.destroy();
+// }

@@ -1,8 +1,8 @@
 const express = require('express');
 const moment = require('moment');
 
-const ContenedorProducts = require('./clases/claseProducts');
-const ContenedorMensajes = require('./clases/claseMensajes');
+const ContenedorProducts = require('./class/productsClass');
+const ContenedorMensajes = require('./class/messageClass');
 
 const p = new ContenedorProducts();
 
@@ -37,7 +37,7 @@ app.get('/productos', async (req, res) => {
 
   await p.save();
 
-  res.status(200).render('index');
+  res.render('index');
 });
 
 

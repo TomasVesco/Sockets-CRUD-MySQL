@@ -1,5 +1,5 @@
-const { options } = require('../DBcfg/mariaDB_conf');
-const knex = require('knex')(options);
+const { MariaDB_options } = require('../DBcfg/mariaDB_conf');
+const knex = require('knex')(MariaDB_options);
 
 class ContenedorProducts {
 

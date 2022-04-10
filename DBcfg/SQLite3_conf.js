@@ -1,6 +1,6 @@
 const dotenv = require('dotenv').config();
 
-const MariaDB_options = {
+const SQLite3_options = {
     client: 'mysql',
     connection: {
         host: process.env.SQLhost,
@@ -11,5 +11,5 @@ const MariaDB_options = {
 }
 
 module.exports = {
-    MariaDB_options
+    SQLite3_options
 }

@@ -32,22 +32,22 @@ const socket = io.connect();
 // }
 
 function renderProduct(data) {
-    const html = data.map(elem => {
-        if(elem.title !== ''){
+    if(data.length !== 0){
+        const html = data.map(elem => {
+
             return(`
             <td>${elem.title}</td>
             <td>${elem.price}</td>
             <td><img src="${elem.image}" alt=""></td>
             `)
-        } else {
-            return(`
-            <td>
-                <strong>No hay Productos</strong>
-            </td>
-            `)
-        }
-    });
-    document.getElementById('products').innerHTML = html;
+
+        });
+        document.getElementById('products').innerHTML = html;
+    } else {
+
+        document.getElementById('products').innerHTML = '<strong>No hay productos</strong>';
+
+    }
 }
 
 socket.on('products', function(data) { renderProduct(data); });

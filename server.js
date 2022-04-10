@@ -40,6 +40,7 @@ app.get('/productos', async (req, res) => {
   res.status(200).render('index');
 });
 
+
 // io.on("connection", async function (socket) {
 
 //   products = await p.getAll();
